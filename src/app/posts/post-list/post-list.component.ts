@@ -1,3 +1,4 @@
+import { PostsService } from './../services/posts.service';
 import { Post } from './../models/post';
 import { Component, OnInit, Input } from '@angular/core';
 
@@ -8,10 +9,15 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class PostListComponent implements OnInit {
 
-  @Input() posts: Post[] = [];
+  posts: Post[] = [];
 
-  constructor() { }
+  constructor(
+    private postService: PostsService
+  ) { }
 
   ngOnInit(): void {
+    this.postService.postAdded.subscribe(posts => {
+      this.posts = posts;
+    })
   }
 }

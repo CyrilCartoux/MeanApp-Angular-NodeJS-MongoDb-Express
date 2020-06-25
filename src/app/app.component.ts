@@ -7,9 +7,5 @@ import { Component, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  storedPosts: Post[] = [];
-
-  onPostAdded(post) {
-    this.storedPosts.push(post);
-  }
+  
 }
