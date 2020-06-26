@@ -8,4 +8,7 @@ router.get('/api/posts', postsController.getPosts)
 // POST /api/posts
 router.post('/api/posts', postsController.postPosts)
 
+// DELETE /api/post/:postId
+router.delete('/api/post/:postId', postsController.deletePost)
+
 module.exports = router;

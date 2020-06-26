@@ -6,7 +6,7 @@ exports.getPosts = async (req, res, next) => {
     if (!posts) {
         const error = new Error("No posts found")
         error.status = 404;
-        throw(error)
+        throw (error)
     }
     console.log('posts founded' + posts)
     res.status(200).json({
@@ -20,9 +20,24 @@ exports.postPosts = (req, res, next) => {
         title: req.body.title,
         content: req.body.content
     })
-    newPost.save();
-    res.status(201).json({
-        message: 'Post added',
-        post: newPost
-    })
+    newPost.save()
+        .then(createdPost => {
+            res.status(201).json({
+                message: 'Post added',
+                postId: createdPost._id
+            })
+        })
+}
+
+exports.deletePost = async (req, res, next) => {
+    const postId = req.params.postId;
+    Post.deleteOne({ _id: postId })
+        .then(result => {
+            res.status(200).json({
+                message: 'post deleted'
+            })
+        })
+        .catch(err => {
+            console.log(err)
+        })
 }
