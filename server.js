@@ -1,6 +1,7 @@
 const app = require("./backend/app");
 const debug = require("debug")("node-angular");
 const http = require("http");
+const db = require("./backend/util/database")
 
 const normalizePort = val => {
   var port = parseInt(val, 10);
@@ -49,4 +50,11 @@ app.set("port", port);
 const server = http.createServer(app);
 server.on("error", onError);
 server.on("listening", onListening);
-server.listen(port);
+db().then(() => {
+  console.log("connected to db!")
+  server.listen(port);
+})
+  .catch(err => {
+    console.log(err)
+  })
+
