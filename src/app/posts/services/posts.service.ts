@@ -24,8 +24,12 @@ export class PostsService {
   }
 
   addPost(post: Post) {
-    this.posts.push(post);
-    this.postAdded.next([...this.posts]);
+    this.http.post<{ message: string, posts: Post[] }>(this.url + 'api/posts', post)
+      .subscribe(res => {
+        console.log(res);
+        this.posts.push(post);
+        this.postAdded.next([...this.posts])
+      });
   }
 
 }
