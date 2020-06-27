@@ -41,3 +41,26 @@ exports.deletePost = async (req, res, next) => {
             console.log(err)
         })
 }
+
+exports.editPost = (req, res, next) => {
+    const postId = req.params.postId;
+    const newPost = {
+        title: req.body.title,
+        content: req.body.content
+    }
+    Post.findById(postId)
+        .then(post => {
+            console.log(post)
+            post.title = newPost.title;
+            post.content = newPost.content;
+            return post.save()
+                .then(result => {
+                    console.log(result)
+                    res.status(200).json({ message: 'post updated' })
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        })
+
+}
