@@ -1,3 +1,5 @@
+import { Post } from './../models/post';
+import { PostsService } from './../services/posts.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
@@ -8,12 +10,21 @@ import { ActivatedRoute, Params } from '@angular/router';
 })
 export class PostEditComponent implements OnInit {
 
-  idToEdit: number;
+  idToEdit: string;
+  postToEdit: Post;
+  posts: Post[] = [];
 
-  constructor(private activatedRoute: ActivatedRoute) { }
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private postService: PostsService
+  ) { }
 
   ngOnInit(): void {
-    console.log(+this.activatedRoute.snapshot.params);
+    
+    this.activatedRoute.params.subscribe((data: Params) => {
+      this.idToEdit = data.postId;
+      console.log(this.idToEdit)
+    });
   }
 
 }

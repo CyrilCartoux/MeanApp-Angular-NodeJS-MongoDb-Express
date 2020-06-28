@@ -3,9 +3,10 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 
-const routes: Routes = [{
-  path: 'edit/:postId', component: PostEditComponent
-}];
+const routes: Routes = [
+  { path: 'edit', component: PostEditComponent },
+  { path: 'edit/:postId', component: PostEditComponent }
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
