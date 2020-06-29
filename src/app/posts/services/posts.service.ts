@@ -58,12 +58,16 @@ export class PostsService {
   editPost(id: string, post: Post) {
     this.http.put<Post>(this.url + 'api/post/' + id, post)
       .subscribe(result => {
-        console.log(result)
-      })
+        const updatedPosts = [...this.posts];
+        const oldPostIndex = updatedPosts.findIndex(p => p.id === post.id);
+        updatedPosts[oldPostIndex] = post;
+        this.posts = updatedPosts;
+        this.postAdded.next([...this.posts]);
+      });
   }
 
   getPost(id: string) {
-    return { ...this.posts.find(p => p.id === id) };
+    return this.http.get<{ _id: string, title: string, content: string}>(this.url + 'api/post/' + id);
   }
 
 }

@@ -1,5 +1,4 @@
 const Post = require("./../models/posts")
-let posts;
 
 exports.getPosts = async (req, res, next) => {
     const posts = await Post.find()
@@ -13,6 +12,17 @@ exports.getPosts = async (req, res, next) => {
         message: "post fetched",
         posts: posts
     })
+}
+
+exports.getPost = async (req, res, next) => {
+    const postId = req.params.postId;
+    const post = await Post.findById(postId)
+
+    if (post) {
+        res.status(200).json(post)
+    } else {
+        res.status(404).json({ message: 'Post not found' })
+    }
 }
 
 exports.postPosts = (req, res, next) => {
@@ -44,7 +54,6 @@ exports.deletePost = async (req, res, next) => {
 
 exports.editPost = (req, res, next) => {
     const postId = req.params.postId;
-    console.log("TITLE :" + req.body.title)
     const newPost = {
         title: req.body.title,
         content: req.body.content

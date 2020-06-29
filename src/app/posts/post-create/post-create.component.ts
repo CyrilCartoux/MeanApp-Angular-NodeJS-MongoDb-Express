@@ -1,4 +1,4 @@
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { PostsService } from './../services/posts.service';
 import { Post } from './../models/post';
 import { Component, OnInit } from '@angular/core';
@@ -14,19 +14,25 @@ export class PostCreateComponent implements OnInit {
   editMode = false;
   postId: string;
   postToEdit: Post;
+  isLoading = false;
 
   constructor(
     private postsService: PostsService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe((data: ParamMap) => {
+      this.isLoading = true;
       if (data.has('postId')) {
         this.editMode = true;
         this.postId = data.get('postId');
-        this.postToEdit = this.postsService.getPost(this.postId);
-        console.log(this.postToEdit)
+        this.postsService.getPost(this.postId)
+          .subscribe((post) => {
+            this.isLoading = false;
+            this.postToEdit = { id: post._id, title: post.title, content: post.content };
+          });
       } else {
         this.editMode = false;
         this.postId = null;
@@ -34,7 +40,7 @@ export class PostCreateComponent implements OnInit {
     });
   }
 
-  onAddPost(form: NgForm) {
+  onSavePost(form: NgForm) {
     const post: Post = {
       id: null,
       title: form.value.title,
@@ -45,11 +51,11 @@ export class PostCreateComponent implements OnInit {
     }
     if (this.editMode) {
       this.postsService.editPost(this.postId, post);
-      form.resetForm()
     } else {
       this.postsService.addPost(post);
-      form.resetForm();
     }
+    form.resetForm();
+    this.router.navigateByUrl('/');
   }
 
 }
