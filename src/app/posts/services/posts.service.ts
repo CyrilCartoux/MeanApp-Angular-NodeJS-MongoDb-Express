@@ -42,7 +42,6 @@ export class PostsService {
         this.posts.push(post);
         this.postAdded.next([...this.posts]);
       });
-
   }
 
   deletePost(id: string) {
@@ -54,6 +53,17 @@ export class PostsService {
         this.posts = updatedPosts;
         this.postAdded.next([...this.posts]);
       });
+  }
+
+  editPost(id: string, post: Post) {
+    this.http.put<Post>(this.url + 'api/post/' + id, post)
+      .subscribe(result => {
+        console.log(result)
+      })
+  }
+
+  getPost(id: string) {
+    return { ...this.posts.find(p => p.id === id) };
   }
 
 }

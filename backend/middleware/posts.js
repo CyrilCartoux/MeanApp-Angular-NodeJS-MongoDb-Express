@@ -44,6 +44,7 @@ exports.deletePost = async (req, res, next) => {
 
 exports.editPost = (req, res, next) => {
     const postId = req.params.postId;
+    console.log("TITLE :" + req.body.title)
     const newPost = {
         title: req.body.title,
         content: req.body.content

@@ -7,18 +7,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // Components
 import { PostCreateComponent } from './posts/post-create/post-create.component';
 import { PostListComponent } from './posts/post-list/post-list.component';
-
+import { HeaderComponent } from './header/header.component';
 // material
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { HeaderComponent } from './header/header.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatExpansionModule } from '@angular/material/expansion';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import { HttpClientModule } from '@angular/common/http';
-import { PostEditComponent } from './posts/post-edit/post-edit.component';
 
 
 
@@ -27,8 +25,7 @@ import { PostEditComponent } from './posts/post-edit/post-edit.component';
     AppComponent,
     PostCreateComponent,
     HeaderComponent,
-    PostListComponent,
-    PostEditComponent
+    PostListComponent
   ],
   imports: [
     BrowserModule,

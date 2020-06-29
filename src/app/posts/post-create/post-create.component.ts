@@ -1,6 +1,7 @@
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { PostsService } from './../services/posts.service';
 import { Post } from './../models/post';
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 @Component({
@@ -10,24 +11,45 @@ import { NgForm } from '@angular/forms';
 })
 export class PostCreateComponent implements OnInit {
 
+  editMode = false;
+  postId: string;
+  postToEdit: Post;
+
   constructor(
-    private postsService: PostsService
+    private postsService: PostsService,
+    private activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+    this.activatedRoute.paramMap.subscribe((data: ParamMap) => {
+      if (data.has('postId')) {
+        this.editMode = true;
+        this.postId = data.get('postId');
+        this.postToEdit = this.postsService.getPost(this.postId);
+        console.log(this.postToEdit)
+      } else {
+        this.editMode = false;
+        this.postId = null;
+      }
+    });
   }
 
   onAddPost(form: NgForm) {
-    if (form.invalid) {
-      return;
-    }
     const post: Post = {
       id: null,
       title: form.value.title,
       content: form.value.content
     };
-    this.postsService.addPost(post);
-    form.resetForm();
+    if (form.invalid) {
+      return;
+    }
+    if (this.editMode) {
+      this.postsService.editPost(this.postId, post);
+      form.resetForm()
+    } else {
+      this.postsService.addPost(post);
+      form.resetForm();
+    }
   }
 
 }
