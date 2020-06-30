@@ -34,12 +34,19 @@ export class PostsService {
       });
   }
 
-  addPost(post: Post) {
-    this.http.post<{ message: string, postId: string }>(this.url + 'api/posts', post)
+  addPost(post: Post, image: File) {
+    const postData = new FormData();
+    postData.append('title', post.title);
+    postData.append('content', post.content);
+    postData.append('image', image, post.title);
+    this.http.post<{ message: string, postId: string }>(this.url + 'api/posts', postData)
       .subscribe(res => {
-        const postId = res.postId;
-        post.id = postId;
-        this.posts.push(post);
+        const newPost: Post = {
+          id: res.postId,
+          title: post.title,
+          content: post.content,
+        };
+        this.posts.push(newPost);
         this.postAdded.next([...this.posts]);
       });
   }
@@ -67,7 +74,7 @@ export class PostsService {
   }
 
   getPost(id: string) {
-    return this.http.get<{ _id: string, title: string, content: string}>(this.url + 'api/post/' + id);
+    return this.http.get<{ _id: string, title: string, content: string }>(this.url + 'api/post/' + id);
   }
 
 }

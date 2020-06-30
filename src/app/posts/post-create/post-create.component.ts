@@ -70,7 +70,7 @@ export class PostCreateComponent implements OnInit {
     if (this.editMode) {
       this.postsService.editPost(this.postId, post);
     } else {
-      this.postsService.addPost(post);
+      this.postsService.addPost(post, this.postCreateForm.value.image);
     }
     this.postCreateForm.reset();
     this.router.navigateByUrl('/');
