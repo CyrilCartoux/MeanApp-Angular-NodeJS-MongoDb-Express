@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const { strict } = require("assert")
 
 const postSchema = mongoose.Schema({
     title: {
@@ -6,6 +7,10 @@ const postSchema = mongoose.Schema({
         required: true
     },
     content: {
+        type: String,
+        required: true
+    },
+    imagePath: {
         type: String,
         required: true
     }

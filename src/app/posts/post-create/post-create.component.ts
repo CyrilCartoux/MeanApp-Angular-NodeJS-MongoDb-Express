@@ -32,24 +32,35 @@ export class PostCreateComponent implements OnInit {
       content: new FormControl(null, { validators: [Validators.required] }),
       image: new FormControl(null, { validators: [Validators.required], asyncValidators: [mimeType] })
     });
+
     // get the id from the route then fetch the post
     this.activatedRoute.paramMap.subscribe((data: ParamMap) => {
+
       if (data.has('postId')) {
         this.isLoading = true;
         this.editMode = true;
         this.postId = data.get('postId');
+
         this.postsService.getPost(this.postId)
           .subscribe((post) => {
             this.isLoading = false;
-            this.postToEdit = { id: post._id, title: post.title, content: post.content };
+
+            this.postToEdit = {
+              id: post._id,
+              title: post.title,
+              content: post.content,
+              imagePath: post.imagePath
+            };
+
             console.log(this.postToEdit)
             this.postCreateForm.setValue({
               title: this.postToEdit.title,
               content: this.postToEdit.content,
-              image: null
+              image: this.postToEdit.imagePath
             });
             console.log(this.postToEdit.content)
           });
+
       } else {
         this.editMode = false;
         this.postId = null;
@@ -62,13 +73,14 @@ export class PostCreateComponent implements OnInit {
     const post: Post = {
       id: null,
       title: this.postCreateForm.value.title,
-      content: this.postCreateForm.value.content
+      content: this.postCreateForm.value.content,
+      imagePath: null
     };
     if (this.postCreateForm.invalid) {
       return;
     }
     if (this.editMode) {
-      this.postsService.editPost(this.postId, post);
+      this.postsService.editPost(this.postId, post, this.postCreateForm.value.image);
     } else {
       this.postsService.addPost(post, this.postCreateForm.value.image);
     }

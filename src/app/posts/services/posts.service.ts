@@ -25,6 +25,7 @@ export class PostsService {
             id: post._id,
             title: post.title,
             content: post.content,
+            imagePath: post.imagePath
           };
         });
       }))
@@ -39,15 +40,17 @@ export class PostsService {
     postData.append('title', post.title);
     postData.append('content', post.content);
     postData.append('image', image, post.title);
-    this.http.post<{ message: string, postId: string }>(this.url + 'api/posts', postData)
+    this.http.post<{ message: string, post: Post }>(this.url + 'api/posts', postData)
       .subscribe(res => {
-        const newPost: Post = {
-          id: res.postId,
-          title: post.title,
-          content: post.content,
-        };
-        this.posts.push(newPost);
-        this.postAdded.next([...this.posts]);
+        this.getPosts();
+        // const newPost: Post = {
+        //   id: res.post.id,
+        //   title: post.title,
+        //   content: post.content,
+        //   imagePath: res.post.imagePath
+        // };
+        // this.posts.push(newPost);
+        // this.postAdded.next([...this.posts]);
       });
   }
 
@@ -62,19 +65,41 @@ export class PostsService {
       });
   }
 
-  editPost(id: string, post: Post) {
-    this.http.put<Post>(this.url + 'api/post/' + id, post)
+  editPost(id: string, post: Post, image: File | string) {
+    let postData;
+    if (typeof (image) === 'object') {
+      postData = new FormData();
+      postData.append('id', post.id);
+      postData.append('title', post.title);
+      postData.append('content', post.content);
+      postData.append('image', image, post.title);
+    } else {
+      postData = {
+        id: post.id,
+        title: post.title,
+        content: post.content,
+        imagePath: image
+      }
+    }
+    this.http.put<Post>(this.url + 'api/post/' + id, postData)
       .subscribe(result => {
-        const updatedPosts = [...this.posts];
-        const oldPostIndex = updatedPosts.findIndex(p => p.id === post.id);
-        updatedPosts[oldPostIndex] = post;
-        this.posts = updatedPosts;
-        this.postAdded.next([...this.posts]);
+        // const updatedPosts = [...this.posts];
+        // const oldPostIndex = updatedPosts.findIndex(p => p.id === postData.id);
+        // const newPost: Post = {
+        //   id: result.id,
+        //   title: result.title,
+        //   content: result.content,
+        //   imagePath: result.imagePath
+        // };
+
+        // updatedPosts[oldPostIndex] = newPost;
+        // this.posts = updatedPosts;
+        this.getPosts();
       });
   }
 
   getPost(id: string) {
-    return this.http.get<{ _id: string, title: string, content: string }>(this.url + 'api/post/' + id);
+    return this.http.get<{ _id: string, title: string, content: string, imagePath: string }>(this.url + 'api/post/' + id);
   }
 
 }

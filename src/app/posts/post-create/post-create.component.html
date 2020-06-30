@@ -16,6 +16,6 @@
             <textarea formControlName='content' matInput rows="6" placeholder="Post content" name="content"></textarea>
             <mat-error *ngIf="postCreateForm.get('content').invalid"> Please enter content</mat-error>
         </mat-form-field>
-        <button type="submit" color='accent' [disabled]="postCreateForm.invalid" mat-raised-button>Save Post</button>
+        <button type="submit" color='accent' mat-raised-button>Save Post</button>
     </form>
 </mat-card>

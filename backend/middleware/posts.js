@@ -7,7 +7,6 @@ exports.getPosts = async (req, res, next) => {
         error.status = 404;
         throw (error)
     }
-    console.log('posts founded' + posts)
     res.status(200).json({
         message: "post fetched",
         posts: posts
@@ -26,15 +25,22 @@ exports.getPost = async (req, res, next) => {
 }
 
 exports.postPosts = (req, res, next) => {
+    const url = req.protocol + '://' + req.get("host");
     const newPost = new Post({
         title: req.body.title,
-        content: req.body.content
+        content: req.body.content,
+        imagePath: url + '/images/' + req.file.filename
     })
     newPost.save()
         .then(createdPost => {
             res.status(201).json({
                 message: 'Post added',
-                postId: createdPost._id
+                post: {
+                    id: createdPost._id,
+                    title: createdPost.title,
+                    content: createdPost.content,
+                    imagePath: createdPost.imagePath
+                }
             })
         })
 }
@@ -53,19 +59,25 @@ exports.deletePost = async (req, res, next) => {
 }
 
 exports.editPost = (req, res, next) => {
+    let imagePath = req.body.imagePath;
+    if (req.file) {
+        const url = req.protocol + '://' + req.get("host");
+        imagePath = url + '/images/' + req.file.filename
+    }
     const postId = req.params.postId;
     const newPost = {
         title: req.body.title,
-        content: req.body.content
+        content: req.body.content,
+        imagePath: imagePath
     }
     Post.findById(postId)
         .then(post => {
-            console.log(post)
             post.title = newPost.title;
             post.content = newPost.content;
+            post.imagePath = newPost.imagePath
+            console.log(post)
             return post.save()
                 .then(result => {
-                    console.log(result)
                     res.status(200).json({ message: 'post updated' })
                 })
                 .catch(err => {
