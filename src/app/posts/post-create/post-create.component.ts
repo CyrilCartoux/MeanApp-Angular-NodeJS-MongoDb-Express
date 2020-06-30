@@ -1,8 +1,9 @@
+import { mimeType } from './mime-type.validator';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { PostsService } from './../services/posts.service';
 import { Post } from './../models/post';
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormGroup, Validators, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-post-create',
@@ -15,6 +16,8 @@ export class PostCreateComponent implements OnInit {
   postId: string;
   postToEdit: Post;
   isLoading = false;
+  imagePreview: string;
+  postCreateForm: FormGroup;
 
   constructor(
     private postsService: PostsService,
@@ -23,6 +26,13 @@ export class PostCreateComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // Init form
+    this.postCreateForm = new FormGroup({
+      title: new FormControl(null, { validators: [Validators.required] }),
+      content: new FormControl(null, { validators: [Validators.required] }),
+      image: new FormControl(null, { validators: [Validators.required], asyncValidators: [mimeType] })
+    });
+    // get the id from the route then fetch the post
     this.activatedRoute.paramMap.subscribe((data: ParamMap) => {
       if (data.has('postId')) {
         this.isLoading = true;
@@ -32,6 +42,13 @@ export class PostCreateComponent implements OnInit {
           .subscribe((post) => {
             this.isLoading = false;
             this.postToEdit = { id: post._id, title: post.title, content: post.content };
+            console.log(this.postToEdit)
+            this.postCreateForm.setValue({
+              title: this.postToEdit.title,
+              content: this.postToEdit.content,
+              image: null
+            });
+            console.log(this.postToEdit.content)
           });
       } else {
         this.editMode = false;
@@ -40,13 +57,14 @@ export class PostCreateComponent implements OnInit {
     });
   }
 
-  onSavePost(form: NgForm) {
+
+  onSavePost() {
     const post: Post = {
       id: null,
-      title: form.value.title,
-      content: form.value.content
+      title: this.postCreateForm.value.title,
+      content: this.postCreateForm.value.content
     };
-    if (form.invalid) {
+    if (this.postCreateForm.invalid) {
       return;
     }
     if (this.editMode) {
@@ -54,8 +72,20 @@ export class PostCreateComponent implements OnInit {
     } else {
       this.postsService.addPost(post);
     }
-    form.resetForm();
+    this.postCreateForm.reset();
     this.router.navigateByUrl('/');
+  }
+
+  onImagePicked(event: Event) {
+    // tell typescript this is a htmlInputelement otherwise it wont recognise the .files
+    const file = (event.target as HTMLInputElement).files[0];
+    this.postCreateForm.patchValue({ image: file });
+    this.postCreateForm.get('image').updateValueAndValidity();
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagePreview = reader.result as string;
+    };
+    reader.readAsDataURL(file)
   }
 
 }
