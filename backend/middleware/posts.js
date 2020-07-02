@@ -1,17 +1,26 @@
 const Post = require("./../models/posts")
 
-exports.getPosts = async (req, res, next) => {
-    const posts = await Post.find()
-    if (!posts) {
-        const error = new Error("No posts found")
-        error.status = 404;
-        throw (error)
+exports.getPosts = (req, res, next) => {
+    const pageSize = +req.query.pagesize;
+    const currentPage = +req.query.page;
+    const postQuery = Post.find();
+    let fetchedPosts;
+    if (pageSize && currentPage) {
+      postQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
     }
-    res.status(200).json({
-        message: "post fetched",
-        posts: posts
-    })
-}
+    postQuery
+      .then(documents => {
+        fetchedPosts = documents;
+        return Post.count();
+      })
+      .then(count => {
+        res.status(200).json({
+          message: "Posts fetched successfully!",
+          posts: fetchedPosts,
+          maxPosts: count
+        });
+      });
+  };
 
 exports.getPost = async (req, res, next) => {
     const postId = req.params.postId;

@@ -18,6 +18,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { HttpClientModule } from '@angular/common/http';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 
@@ -41,7 +42,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatIconModule,
     MatFormFieldModule,
     MatProgressSpinnerModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatPaginatorModule
   ],
   providers: [],
   bootstrap: [AppComponent]
