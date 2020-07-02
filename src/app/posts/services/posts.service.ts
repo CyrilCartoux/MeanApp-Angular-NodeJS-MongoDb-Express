@@ -53,7 +53,7 @@ export class PostsService {
       title: string;
       content: string;
       imagePath: string;
-    }>('http://localhost:3000/api/posts/' + id);
+    }>('http://localhost:3000/api/post/' + id);
   }
 
   addPost(title: string, content: string, image: File) {
