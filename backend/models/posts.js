@@ -1,5 +1,4 @@
 const mongoose = require("mongoose")
-const { strict } = require("assert")
 
 const postSchema = mongoose.Schema({
     title: {

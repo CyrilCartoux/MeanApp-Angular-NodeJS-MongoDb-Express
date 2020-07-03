@@ -1,7 +1,8 @@
 const express = require("express")
 const app = express()
 const bodyParser = require('body-parser')
-const postRoutes = require("./routes/posts");
+const postRoutes = require("./routes/posts")
+const authRoutes = require("./routes/auth")
 const path = require("path");
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -18,5 +19,6 @@ app.use((req, res, next) => {
 });
 
 app.use(postRoutes)
+app.use(authRoutes)
 
 module.exports = app;
