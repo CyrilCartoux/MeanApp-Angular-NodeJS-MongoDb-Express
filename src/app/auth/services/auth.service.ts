@@ -1,4 +1,5 @@
-import { User } from './../user';
+import { AuthData } from './../auth-data';
+import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
@@ -10,13 +11,24 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   signUpUser(email: string, password: string) {
-    const newUser: User = {
+    const data: AuthData = {
       email,
       password
     };
-    this.http.post<User>('http://localhost:3000/signup', newUser)
-      .subscribe((data) => {
-        console.log(data)
+    this.http.post<AuthData>('http://localhost:3000/signup', data)
+      .subscribe((response) => {
+        console.log(response);
+      });
+  }
+
+  loginUser(email: string, password: string) {
+    const data: AuthData = {
+      email,
+      password
+    };
+    this.http.post<AuthData>('http://localhost:3000/login', data)
+      .subscribe(response => {
+        console.log(response)
       })
   }
 
