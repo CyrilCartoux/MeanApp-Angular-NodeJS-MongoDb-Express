@@ -1,6 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const postsController = require("./../controllers/posts")
+const isAuth = require("./../middleware/is-auth")
 
 const multer = require("multer");
 const MIME_TYPE_MAP = {
@@ -31,13 +32,13 @@ router.get('/api/posts', postsController.getPosts)
 router.get('/api/post/:postId', postsController.getPost)
 
 // POST /api/posts
-router.post('/api/posts', multer({storage: storage}).single("image"), postsController.postPosts)
+router.post('/api/posts', isAuth, multer({ storage: storage }).single("image"), postsController.postPosts)
 
 // DELETE /api/post/:postId
-router.delete('/api/post/:postId', postsController.deletePost)
+router.delete('/api/post/:postId', isAuth, postsController.deletePost)
 
 // PUT /api/post/:postId
-router.put('/api/post/:postId', multer({storage: storage}).single("image"), postsController.editPost)
+router.put('/api/post/:postId', isAuth, multer({ storage: storage }).single("image"), postsController.editPost)
 
 
 
