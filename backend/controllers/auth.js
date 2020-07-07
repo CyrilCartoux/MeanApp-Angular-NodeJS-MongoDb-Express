@@ -53,7 +53,7 @@ exports.login = (req, res, next) => {
                     }, "WeAreAllSatoshi", { expiresIn: '1h' })
                     res.status(200).json({
                         token: token,
-                        userId: loadedUser._id.toString()
+                        expiresIn: 3600
                     })
                 })
                 .catch(err => {
