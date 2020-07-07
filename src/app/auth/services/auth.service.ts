@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { AuthData } from './../auth-data';
 import { HttpClient } from '@angular/common/http';
@@ -12,7 +13,10 @@ export class AuthService {
   private isLoggedIn = false;
   private authStatusListener = new Subject<boolean>();
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private router: Router
+    ) { }
 
   getToken(): string {
     return this.token;
@@ -32,7 +36,7 @@ export class AuthService {
     };
     this.http.post<AuthData>('http://localhost:3000/signup', data)
       .subscribe((response) => {
-        console.log(response);
+        this.router.navigate(['/login']);
       });
   }
 
@@ -48,6 +52,7 @@ export class AuthService {
         if (this.token) {
           this.isLoggedIn = true;
           this.authStatusListener.next(true);
+          this.router.navigate(['/']);
         }
       });
   }
@@ -56,6 +61,7 @@ export class AuthService {
     this.token = null;
     this.isLoggedIn = false;
     this.authStatusListener.next(false);
+    this.router.navigate(['/']);
   }
 
 }

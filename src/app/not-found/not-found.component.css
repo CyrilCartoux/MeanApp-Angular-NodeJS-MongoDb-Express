@@ -1,0 +1,14 @@
+h1 {
+    text-align: center;
+}
+
+a {
+    border: 1px solid rgb(120, 166, 241);
+    background-color: rgb(130, 211, 238);
+    color: white;
+}
+
+a:hover {
+    color: black;
+    background-color: white;
+}
