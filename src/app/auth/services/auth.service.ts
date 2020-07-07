@@ -9,6 +9,7 @@ import { Injectable } from '@angular/core';
 export class AuthService {
 
   private token: string;
+  private isLoggedIn = false;
   private authStatusListener = new Subject<boolean>();
 
   constructor(private http: HttpClient) { }
@@ -19,6 +20,9 @@ export class AuthService {
 
   getAuthStatus() {
     return this.authStatusListener.asObservable();
+  }
+  getIsAuth() {
+    return this.isLoggedIn;
   }
 
   signUpUser(email: string, password: string) {
@@ -42,14 +46,16 @@ export class AuthService {
         console.log(response);
         this.token = response.token;
         if (this.token) {
+          this.isLoggedIn = true;
           this.authStatusListener.next(true);
         }
       });
   }
 
   logoutUser() {
-    this.authStatusListener.next(false);
     this.token = null;
+    this.isLoggedIn = false;
+    this.authStatusListener.next(false);
   }
 
 }
