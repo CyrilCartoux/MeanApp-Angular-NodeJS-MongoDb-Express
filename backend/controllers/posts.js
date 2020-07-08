@@ -59,8 +59,10 @@ exports.deletePost = async (req, res, next) => {
     const postId = req.params.postId;
     Post.deleteOne({ creator: req.userData.userId, _id: postId })
         .then(result => {
-            if (!result) {
-                return res.status(404).json({ message: "Cannot delete posts you didn't create" })
+            if (result.n === 0) {
+                return res.status(404).json({
+                    message: 'Cannot delete posts you did not create'
+                })
             }
             res.status(200).json({
                 message: 'post deleted'
@@ -78,27 +80,20 @@ exports.editPost = (req, res, next) => {
         imagePath = url + '/images/' + req.file.filename
     }
     const postId = req.params.postId;
-    const newPost = {
+    const editedPost = new Post({
+        _id: req.body.id,
         title: req.body.title,
         content: req.body.content,
         imagePath: imagePath
-    }
-    Post.findOne({ creator: req.userData.userId, _id: postId })
-        .then(post => {
-            if (!post) {
-                return res.status(404).json({ message: "Cannot edit post you didn't create" })
+    })
+    Post.updateOne({ creator: req.userData.userId, _id: postId }, editedPost)
+        .then(result => {
+            if (result.nModified === 0) {
+                return res.status(404).json({ message: "Cannot update posts you did not create" })
             }
-            post.title = newPost.title;
-            post.content = newPost.content;
-            post.imagePath = newPost.imagePath
-            console.log(post)
-            post.save()
-                .then(result => {
-                    res.status(200).json({ message: 'post updated' })
-                })
-                .catch(err => {
-                    console.log(err)
-                })
+            res.status(200).json({ message: 'post updated' })
         })
-
+        .catch(err => {
+            console.log(err)
+        })
 }

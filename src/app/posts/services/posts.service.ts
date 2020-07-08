@@ -93,7 +93,7 @@ export class PostsService {
     }
     this.http
       .put('http://localhost:3000/api/post/' + id, postData)
-      .subscribe(response => {
+      .subscribe(() => {
         this.router.navigate(['/']);
       });
   }
