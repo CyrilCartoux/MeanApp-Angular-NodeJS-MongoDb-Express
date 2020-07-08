@@ -51,12 +51,10 @@ export class AuthService {
         this.token = response.token;
 
         if (this.token) {
-          console.log(response);
           const expiresInDuration = response.expiresIn;
           this.autologinTimer(expiresInDuration);
           this.isLoggedIn = true;
           this.authStatusListener.next(true);
-          // store authData under localstorage
           const now = new Date();
           const expirationDate = new Date(now.getTime() + (response.expiresIn * 1000));
           this.saveAuthData(response.token, expirationDate);
@@ -67,6 +65,9 @@ export class AuthService {
 
   autologin() {
     const authInfos = this.getAuthData();
+    if (!authInfos) {
+      return;
+    }
     const now = new Date();
     const expiresIn = authInfos.expirationDate.getTime() - now.getTime();
     if (expiresIn > 0) {
@@ -90,12 +91,12 @@ export class AuthService {
 
   private clearAuthData() {
     localStorage.removeItem('token');
-    localStorage.removeItem('expirationDate')
+    localStorage.removeItem('expirationDate');
   }
 
   private getAuthData() {
-    const token = localStorage.getItem('token')
-    const expirationDate = localStorage.getItem('expirationDate')
+    const token = localStorage.getItem('token');
+    const expirationDate = localStorage.getItem('expirationDate');
     if (!token || !expirationDate) {
       return;
     }
