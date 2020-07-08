@@ -1,6 +1,7 @@
+import { Subscription } from 'rxjs';
 import { AuthService } from './../services/auth.service';
 import { NgForm } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'app-signup',
@@ -10,12 +11,17 @@ import { Component, OnInit } from '@angular/core';
 export class SignupComponent implements OnInit {
 
   isLoading = false;
+  private authSubscription: Subscription;
 
   constructor(
     private authService: AuthService
   ) { }
 
   ngOnInit(): void {
+    this.authSubscription = this.authService.getAuthStatus()
+      .subscribe((isAuth) => {
+        this.isLoading = false;
+      });
   }
 
   onSignup(form: NgForm) {
@@ -26,11 +32,15 @@ export class SignupComponent implements OnInit {
     }
     const email = form.value.email;
     const password = form.value.password;
-    console.log(form.value);
+
     this.authService.signUpUser(email, password);
     setTimeout(() => {
       this.isLoading = false;
     }, 500);
+  }
+
+  OnDestroy() {
+    this.authSubscription.unsubscribe();
   }
 
 }
