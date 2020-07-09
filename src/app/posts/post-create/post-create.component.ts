@@ -85,6 +85,7 @@ export class PostCreateComponent implements OnInit {
         this.form.value.content,
         this.form.value.image
       );
+      this.isLoading = false;
     } else {
       this.postsService.updatePost(
         this.postId,
@@ -92,6 +93,7 @@ export class PostCreateComponent implements OnInit {
         this.form.value.content,
         this.form.value.image
       );
+      this.isLoading = false;
     }
     this.form.reset();
   }

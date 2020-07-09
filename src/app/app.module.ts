@@ -27,7 +27,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ErrorInterceptorService } from './error-interceptor.service';
-
+import { ErrorComponent } from './error-handling/error/error.component';
 
 
 @NgModule({
@@ -38,7 +38,8 @@ import { ErrorInterceptorService } from './error-interceptor.service';
     PostListComponent,
     LoginComponent,
     SignupComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,
@@ -68,6 +69,7 @@ import { ErrorInterceptorService } from './error-interceptor.service';
     useClass: ErrorInterceptorService,
     multi: true
   }],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ErrorComponent]
 })
 export class AppModule { }

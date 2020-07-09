@@ -19,6 +19,9 @@ exports.getPosts = (req, res, next) => {
                 posts: fetchedPosts,
                 maxPosts: count
             });
+        })
+        .catch(err => {
+            return res.status(500).json({message: 'Cannot get posts.. Please try again later'})
         });
 };
 
@@ -53,6 +56,9 @@ exports.postPosts = (req, res, next) => {
                 }
             })
         })
+        .catch(err => {
+            return res.status(500).json({message: 'Post creation failed, please try again'})
+        })
 }
 
 exports.deletePost = async (req, res, next) => {
@@ -69,7 +75,7 @@ exports.deletePost = async (req, res, next) => {
             })
         })
         .catch(err => {
-            console.log(err)
+            return res.status(500).json({message: 'Deleting a post failed, please try again later'})
         })
 }
 
@@ -94,6 +100,6 @@ exports.editPost = (req, res, next) => {
             res.status(200).json({ message: 'post updated' })
         })
         .catch(err => {
-            console.log(err)
+            return res.status(500).json({message: 'Updating a post failed, please try again later'})
         })
 }

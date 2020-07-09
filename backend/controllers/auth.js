@@ -21,10 +21,9 @@ exports.signup = async (req, res, next) => {
             })
         })
         .catch(err => {
-            if (!err.statusCode) {
-                err.statusCode = 500;
-            }
-            next(err);
+            res.status(500).json({
+                message: 'Invalid authentication credentials!'
+            })
         })
 }
 
@@ -58,10 +57,9 @@ exports.login = (req, res, next) => {
                     })
                 })
                 .catch(err => {
-                    if (!err.statusCode) {
-                        err.statusCode = 500;
-                    }
-                    next(err);
+                    res.status(401).json({
+                        message: 'Invalid authentication credentials!'
+                    })
                 })
         })
 }
