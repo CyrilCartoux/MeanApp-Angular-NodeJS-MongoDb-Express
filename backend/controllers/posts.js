@@ -94,7 +94,7 @@ exports.editPost = (req, res, next) => {
     })
     Post.updateOne({ creator: req.userData.userId, _id: postId }, editedPost)
         .then(result => {
-            if (result.nModified === 0) {
+            if (result.n === 0) {
                 return res.status(404).json({ message: "Cannot update posts you did not create" })
             }
             res.status(200).json({ message: 'post updated' })
