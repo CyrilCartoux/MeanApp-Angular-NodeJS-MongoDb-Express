@@ -1,3 +1,4 @@
+import { AuthRoutingModule } from './auth-routing.module';
 import { MaterialModule } from './../material/material/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -14,7 +15,8 @@ import { SignupComponent } from './signup/signup.component';
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        MaterialModule
+        MaterialModule,
+        AuthRoutingModule
     ],
     exports: [
         LoginComponent,

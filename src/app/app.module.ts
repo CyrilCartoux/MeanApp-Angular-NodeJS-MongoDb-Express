@@ -15,10 +15,6 @@ import { AuthInterceptorService } from './auth/services/auth-interceptor.service
 import { ErrorInterceptorService } from './error-interceptor.service';
 // Material
 import { MaterialModule } from './material/material/material.module';
-// Auth
-import { AuthModule } from './auth/auth.module';
-// Post
-import { PostModule } from './posts/post.module';
 
 @NgModule({
   declarations: [
@@ -33,9 +29,7 @@ import { PostModule } from './posts/post.module';
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    MaterialModule,
-    AuthModule,
-    PostModule
+    MaterialModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

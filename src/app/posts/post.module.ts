@@ -1,3 +1,4 @@
+import { PostRoutingModule } from './post-routing.module';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from './../material/material/material.module';
@@ -15,7 +16,8 @@ import { PostListComponent } from './post-list/post-list.component';
         CommonModule,
         ReactiveFormsModule,
         MaterialModule,
-        RouterModule
+        RouterModule,
+        PostRoutingModule
     ]
 })
 export class PostModule { }
