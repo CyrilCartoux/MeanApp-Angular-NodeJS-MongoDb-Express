@@ -46,3 +46,4 @@ testem.log
 Thumbs.db
 backend/util/database.js
 backend/images
+backend/node_modules
