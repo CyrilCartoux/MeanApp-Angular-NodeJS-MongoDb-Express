@@ -1,6 +1,0 @@
-{
-    "env": {
-        "MONGO_ATLAS_PASS": "6ssou13530",
-        "JWT_KEY": "WeAreAllSatoshi"
-    }
-}
