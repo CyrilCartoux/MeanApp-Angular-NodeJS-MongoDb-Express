@@ -21,6 +21,7 @@ exports.signup = async (req, res, next) => {
             })
         })
         .catch(err => {
+            console.log('err :>> ', err);
             res.status(500).json({
                 message: 'Invalid authentication credentials!'
             })
@@ -57,6 +58,7 @@ exports.login = (req, res, next) => {
                     })
                 })
                 .catch(err => {
+                    console.log('err :>> ', err);
                     res.status(401).json({
                         message: 'Invalid authentication credentials!'
                     })
